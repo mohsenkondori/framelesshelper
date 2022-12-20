@@ -53,13 +53,14 @@ FRAMELESSHELPER_BEGIN_NAMESPACE
 
 using namespace Global;
 
-StandardTitleBarPrivate::StandardTitleBarPrivate(StandardTitleBar *q) : QObject(q)
+StandardTitleBarPrivate::StandardTitleBarPrivate(StandardTitleBar *q, QHBoxLayout *menuBarLayout) : QObject(q)
 {
     Q_ASSERT(q);
     if (!q) {
         return;
     }
     q_ptr = q;
+    m_menuBarLayout = menuBarLayout;
     initialize();
 }
 
@@ -419,7 +420,9 @@ void StandardTitleBarPrivate::updateMaximizeButton()
 {
 #ifndef Q_OS_MACOS
     const bool max = m_window->isMaximized();
-    m_maximizeButton->setButtonType(max ? SystemButtonType::Restore : SystemButtonType::Maximize);
+//    m_maximizeButton->setButtonType(max ? SystemButtonType::Restore : SystemButtonType::Maximize);
+    if(!q->mMaximizeIcon.isNull() && !q->mMinimizeIcon.isNull())
+        m_maximizeButton->setIcon(max ? q->mMinimizeIcon : q->mMaximizeIcon);
     m_maximizeButton->setToolTip(max ? tr("Restore") : tr("Maximize"));
 #endif // Q_OS_MACOS
 }
@@ -530,10 +533,12 @@ void StandardTitleBarPrivate::initialize()
     connect(m_minimizeButton, &StandardSystemButton::clicked, m_window, &QWidget::showMinimized);
     m_maximizeButton = new StandardSystemButton(SystemButtonType::Maximize, q);
     updateMaximizeButton();
-    connect(m_maximizeButton, &StandardSystemButton::clicked, this, [this](){
+    connect(m_maximizeButton, &StandardSystemButton::clicked, this, [this, q](){
         if (m_window->isMaximized()) {
+            m_maximizeButton->setIcon(q->mMaximizeIcon);
             m_window->showNormal();
         } else {
+            m_maximizeButton->setIcon(q->mMinimizeIcon);
             m_window->showMaximized();
         }
     });
@@ -550,7 +555,8 @@ void StandardTitleBarPrivate::initialize()
     // layouts to ensure this.
     const auto systemButtonsInnerLayout = new QHBoxLayout;
     systemButtonsInnerLayout->setSpacing(0);
-    systemButtonsInnerLayout->setContentsMargins(0, 0, 0, 0);
+    systemButtonsInnerLayout->setContentsMargins(0, 20, 0, 0); //CHECK
+    systemButtonsInnerLayout->addStretch();
     systemButtonsInnerLayout->addWidget(m_minimizeButton);
     systemButtonsInnerLayout->addWidget(m_maximizeButton);
     systemButtonsInnerLayout->addWidget(m_closeButton);
@@ -562,6 +568,8 @@ void StandardTitleBarPrivate::initialize()
     const auto titleBarLayout = new QHBoxLayout(q);
     titleBarLayout->setSpacing(0);
     titleBarLayout->setContentsMargins(0, 0, 0, 0);
+    if(m_menuBarLayout)
+        titleBarLayout->addLayout(m_menuBarLayout);
     titleBarLayout->addStretch();
     titleBarLayout->addLayout(systemButtonsOuterLayout);
     q->setLayout(titleBarLayout);
@@ -573,12 +581,17 @@ void StandardTitleBarPrivate::initialize()
     m_window->installEventFilter(this);
 }
 
-StandardTitleBar::StandardTitleBar(QWidget *parent)
-    : QWidget(parent), d_ptr(new StandardTitleBarPrivate(this))
+StandardTitleBar::StandardTitleBar(QWidget *parent, QHBoxLayout *menuBarLayout)
+    : QWidget(parent), d_ptr(new StandardTitleBarPrivate(this, menuBarLayout))
 {
 }
 
 StandardTitleBar::~StandardTitleBar() = default;
+
+void StandardTitleBar::setPalette(ChromePalette *palette)
+{
+    d_ptr->m_chromePalette = palette;
+}
 
 Qt::Alignment StandardTitleBar::titleLabelAlignment() const
 {
@@ -599,10 +612,21 @@ StandardSystemButton *StandardTitleBar::minimizeButton() const
     return d->m_minimizeButton;
 }
 
+void StandardTitleBar::setMaximizeButton(QIcon maximizeIcon, QIcon minimizeIcon)
+{
+    mMaximizeIcon = maximizeIcon;
+    mMinimizeIcon = minimizeIcon;
+}
+
 StandardSystemButton *StandardTitleBar::maximizeButton() const
 {
     Q_D(const StandardTitleBar);
     return d->m_maximizeButton;
+}
+
+void StandardTitleBar::setCloseButton(QIcon icon)
+{
+    d_ptr->m_closeButton->setIcon(icon);
 }
 
 StandardSystemButton *StandardTitleBar::closeButton() const

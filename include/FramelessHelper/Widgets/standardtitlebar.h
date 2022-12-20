@@ -53,7 +53,7 @@ class FRAMELESSHELPER_WIDGETS_API StandardTitleBar : public QWidget
     Q_PROPERTY(QFont titleFont READ titleFont WRITE setTitleFont NOTIFY titleFontChanged FINAL)
 
 public:
-    explicit StandardTitleBar(QWidget *parent = nullptr);
+    explicit StandardTitleBar(QWidget *parent = nullptr, QHBoxLayout *menuBarLayout = nullptr);
     ~StandardTitleBar() override;
 
     Q_NODISCARD Qt::Alignment titleLabelAlignment() const;
@@ -85,6 +85,10 @@ public:
     Q_NODISCARD QFont titleFont() const;
     void setTitleFont(const QFont &value);
 
+    void setPalette(ChromePalette *palette);
+    void setMinimizeButtonIcon(QIcon icon);
+    void setMaximizeButton(QIcon maximizeIcon, QIcon minimizeIcon);
+    void setCloseButton(QIcon icon);
 protected:
     void paintEvent(QPaintEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
@@ -101,6 +105,9 @@ Q_SIGNALS:
 
 private:
     QScopedPointer<StandardTitleBarPrivate> d_ptr;
+
+    QIcon mMaximizeIcon;
+    QIcon mMinimizeIcon;
 };
 
 FRAMELESSHELPER_END_NAMESPACE

@@ -23,6 +23,8 @@
  */
 
 #include "standardsystembutton.h"
+#include "qstyle.h"
+#include "qstyleoption.h"
 #include "standardsystembutton_p.h"
 #include <FramelessHelper/Core/utils.h>
 #include <FramelessHelper/Core/private/framelessmanager_p.h>
@@ -86,6 +88,7 @@ QString StandardSystemButtonPrivate::getGlyph() const
 
 void StandardSystemButtonPrivate::setGlyph(const QString &value)
 {
+    return;
     Q_ASSERT(!value.isEmpty());
     if (value.isEmpty()) {
         return;
@@ -284,7 +287,7 @@ void StandardSystemButtonPrivate::paintEventHandler(QPaintEvent *event)
         }
         return {};
     }();
-    const QRect buttonRect = {QPoint(0, 0), q->size()};
+    const QRect buttonRect = {QPoint(0, 0), QSize(q->size().width() * 0.6, q->size().height() * 0.6)};
     if (backgroundColor.isValid()) {
         painter.fillRect(buttonRect, backgroundColor);
     }
@@ -306,6 +309,12 @@ void StandardSystemButtonPrivate::paintEventHandler(QPaintEvent *event)
             return font;
         }());
         painter.drawText(buttonRect, Qt::AlignCenter, m_glyph);
+    } else {
+        if (!q->icon().isNull()) {
+            QSize size = getRecommendedButtonSize();
+            painter.drawPixmap(buttonRect,
+                               q->icon().pixmap(size.width(), size.height()));
+        }
     }
     painter.restore();
     event->accept();
