@@ -616,6 +616,7 @@ void StandardTitleBar::setMaximizeButton(QIcon maximizeIcon, QIcon minimizeIcon)
 {
     mMaximizeIcon = maximizeIcon;
     mMinimizeIcon = minimizeIcon;
+    d_ptr->m_maximizeButton->setIcon(isMaximized() ? mMinimizeIcon : mMaximizeIcon);
 }
 
 StandardSystemButton *StandardTitleBar::maximizeButton() const
