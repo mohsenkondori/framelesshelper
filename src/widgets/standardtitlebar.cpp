@@ -532,7 +532,7 @@ void StandardTitleBarPrivate::initialize()
     m_minimizeButton = new StandardSystemButton(SystemButtonType::Minimize, q);
     connect(m_minimizeButton, &StandardSystemButton::clicked, m_window, &QWidget::showMinimized);
     m_maximizeButton = new StandardSystemButton(SystemButtonType::Maximize, q);
-    updateMaximizeButton();
+//    updateMaximizeButton();
     connect(m_maximizeButton, &StandardSystemButton::clicked, this, [this, q](){
         if (m_window->isMaximized()) {
             m_maximizeButton->setIcon(q->mMaximizeIcon);

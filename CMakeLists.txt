@@ -155,7 +155,7 @@ else()
 endif()
 
 if(FRAMELESSHELPER_BUILD_EXAMPLES)
-    add_subdirectory(examples)
+#    add_subdirectory(examples)
 endif()
 
 if(NOT FRAMELESSHELPER_NO_INSTALL)
