@@ -108,6 +108,7 @@ private:
 
     QIcon mMaximizeIcon;
     QIcon mMinimizeIcon;
+    bool mUiIsLoaded;
 };
 
 FRAMELESSHELPER_END_NAMESPACE

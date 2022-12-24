@@ -420,8 +420,7 @@ void StandardTitleBarPrivate::updateMaximizeButton()
 {
 #ifndef Q_OS_MACOS
     const bool max = m_window->isMaximized();
-//    m_maximizeButton->setButtonType(max ? SystemButtonType::Restore : SystemButtonType::Maximize);
-    if(!q->mMaximizeIcon.isNull() && !q->mMinimizeIcon.isNull())
+    if(q->mUiIsLoaded)
         m_maximizeButton->setIcon(max ? q->mMinimizeIcon : q->mMaximizeIcon);
     m_maximizeButton->setToolTip(max ? tr("Restore") : tr("Maximize"));
 #endif // Q_OS_MACOS
@@ -506,6 +505,7 @@ bool StandardTitleBarPrivate::eventFilter(QObject *object, QEvent *event)
 void StandardTitleBarPrivate::initialize()
 {
     Q_Q(StandardTitleBar);
+    q->mUiIsLoaded = false;
     m_window = q->window();
     m_chromePalette = new ChromePalette(this);
     connect(m_chromePalette, &ChromePalette::titleBarColorChanged,
@@ -616,6 +616,7 @@ void StandardTitleBar::setMaximizeButton(QIcon maximizeIcon, QIcon minimizeIcon)
 {
     mMaximizeIcon = maximizeIcon;
     mMinimizeIcon = minimizeIcon;
+    mUiIsLoaded = true;
     d_ptr->m_maximizeButton->setIcon(isMaximized() ? mMinimizeIcon : mMaximizeIcon);
 }
 
