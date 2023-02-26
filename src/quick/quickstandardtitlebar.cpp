@@ -271,12 +271,12 @@ void QuickStandardTitleBar::updateTitleBarColor()
         return;
     }
     const bool active = w->isActive();
-    const QColor backgroundColor = (active ?
-        m_chromePalette->titleBarActiveBackgroundColor() :
-        m_chromePalette->titleBarInactiveBackgroundColor());
-    const QColor foregroundColor = (active ?
-        m_chromePalette->titleBarActiveForegroundColor() :
-        m_chromePalette->titleBarInactiveForegroundColor());
+    const QColor backgroundColor = "#717578";//(active ?
+//        m_chromePalette->titleBarActiveBackgroundColor() :
+//        m_chromePalette->titleBarInactiveBackgroundColor());
+    const QColor foregroundColor = "#e6eaed";//(active ?
+//        m_chromePalette->titleBarActiveForegroundColor() :
+//        m_chromePalette->titleBarInactiveForegroundColor());
     setColor(backgroundColor);
     m_windowTitleLabel->setColor(foregroundColor);
 }
