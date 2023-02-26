@@ -143,6 +143,7 @@ void QuickStandardSystemButton::setGlyph(const QString &value)
         return;
     }
     m_glyph = value;
+    qDebug()<<Q_FUNC_INFO<<__LINE__<<m_glyph;
     m_contentItem->setText(m_glyph);
     Q_EMIT glyphChanged();
 }
