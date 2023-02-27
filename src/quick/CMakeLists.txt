@@ -141,10 +141,10 @@ if(QT_VERSION VERSION_GREATER_EQUAL "6.3")
         TYPEINFO "plugins.qmltypes" # This is the type info file name since at least Qt5, some tools won't recognize other names.
         #NO_RESOURCE_TARGET_PATH # Can't be used for non-executables.
         OUTPUT_TARGETS __qml_targets
-        IMPORTS
-            QtQml/auto
-            QtQuick/auto
-            QtQuick.Controls.Basic/auto
+#        IMPORTS
+#            QtQml/auto
+#            QtQuick/auto
+#            QtQuick.Controls.Basic/auto
     )
     if(__qml_targets)
         list(APPEND __export_targets ${__qml_targets})
