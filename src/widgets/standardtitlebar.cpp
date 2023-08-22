@@ -418,12 +418,11 @@ bool StandardTitleBarPrivate::isInTitleBarIconArea(const QPoint &pos) const
 
 void StandardTitleBarPrivate::updateMaximizeButton()
 {
-#ifndef Q_OS_MACOS
+    Q_Q(StandardTitleBar);
     const bool max = m_window->isMaximized();
     if(q->mUiIsLoaded)
         m_maximizeButton->setIcon(max ? q->mMinimizeIcon : q->mMaximizeIcon);
     m_maximizeButton->setToolTip(max ? tr("Restore") : tr("Maximize"));
-#endif // Q_OS_MACOS
 }
 
 void StandardTitleBarPrivate::updateTitleBarColor()

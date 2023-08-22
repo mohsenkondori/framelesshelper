@@ -55,7 +55,7 @@ public:
         int ascent = 0;
     };
 
-    explicit StandardTitleBarPrivate(StandardTitleBar *q);
+    explicit StandardTitleBarPrivate(StandardTitleBar *q, QHBoxLayout *menuBarLayout);
     ~StandardTitleBarPrivate() override;
 
     Q_NODISCARD static StandardTitleBarPrivate *get(StandardTitleBar *pub);
@@ -124,6 +124,8 @@ private:
     bool m_windowIconVisible = false;
     std::optional<QFont> m_titleFont = std::nullopt;
     bool m_closeTriggered = false;
+
+    QHBoxLayout *m_menuBarLayout;
 };
 
 FRAMELESSHELPER_END_NAMESPACE

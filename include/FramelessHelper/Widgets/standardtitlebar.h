@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "qboxlayout.h"
 #include <FramelessHelper/Widgets/framelesshelperwidgets_global.h>
 #include <FramelessHelper/Widgets/standardsystembutton.h>
 #include <FramelessHelper/Core/chromepalette.h>
